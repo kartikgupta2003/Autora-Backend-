@@ -39,7 +39,9 @@ const app = express();
 
 app.set("trust proxy", true);
 app.use(cors({
-  origin: "http://localhost:5173",  // ✅ your frontend origin
+  origin:[ "http://localhost:5173",
+  "https://autora-frontend.vercel.app"
+  ] , // ✅ your frontend origin
   credentials: true,                // ✅ allow credentials (cookies)
 }));
 app.use(express.json());
