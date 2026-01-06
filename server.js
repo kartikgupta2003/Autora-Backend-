@@ -38,12 +38,44 @@ connectDB();
 const app = express();
 
 app.set("trust proxy", true);
-app.use(cors({
-  origin:[ "http://localhost:5173",
+// app.use((req, res, next) => {
+//   if (req.method === "OPTIONS") {
+//     res.header("Access-Control-Allow-Origin", "https://autora-frontend.vercel.app");
+//     res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+//     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+//     res.header("Access-Control-Allow-Credentials", "true");
+//     return res.sendStatus(200);
+//   }
+//   next();
+// });
+
+// app.use(cors({
+//   origin:[ "http://localhost:5173",
+//   "https://autora-frontend.vercel.app"
+//   ] , // ✅ your frontend origin
+//   credentials: true,                // ✅ allow credentials (cookies)
+// }));
+
+const allowedOrigins = [
+  "http://localhost:5173",
   "https://autora-frontend.vercel.app"
-  ] , // ✅ your frontend origin
-  credentials: true,                // ✅ allow credentials (cookies)
-}));
+];
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+  }
+  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.header("Access-Control-Allow-Credentials", "true");
+
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
 app.use(cookieParser());
@@ -65,5 +97,13 @@ app.use("/api/adminDrive", adminTestDriveRoutes);
 
 app.use(errorHandler);
 
-const port = process.env.PORT ;
-app.listen(port , ()=> console.log(`Server started at port ${port}`));
+// const port = process.env.PORT ;
+// app.listen(port , ()=> console.log(`Server started at port ${port}`));
+
+const port = process.env.PORT || 8000;
+
+if (process.env.NODE_ENV !== "production") {
+  app.listen(port, () => console.log(`Server started at port ${port}`));
+}
+
+export default app;
