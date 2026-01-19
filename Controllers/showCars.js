@@ -11,6 +11,7 @@ export const getCarFilters = asyncHandler(async (req, res, next) => {
     try {
         const makes = await Car.distinct("make", { status: "AVAILABLE" });
         makes.sort((a, b) => a.localeCompare(b));
+        // distinct() in Mongoose is used to get unique (non-duplicate) values of a specific field from a MongoDB collection.
 
         const bodyTypes = await Car.distinct("bodyType", { status: "AVAILABLE" });
         bodyTypes.sort((a, b) => a.localeCompare(b));
@@ -31,6 +32,16 @@ export const getCarFilters = asyncHandler(async (req, res, next) => {
                 },
             },
         ]);
+        // aggregate() in Mongoose is used to run MongoDB’s Aggregation Pipeline, which lets you transform, filter, group, and compute data in multiple steps.
+        // Each stage modifies the result and passes it to the next stage.
+        // $match – filter (like WHERE)
+        // $group – grouping + calculations
+        // _id: null → sab documents ko ek group me daal do
+        // $min: "$price" → lowest car price
+        // $max: "$price" → highest car price
+        // _id: null → sab documents ko ek group me daal do
+        // $min: "$price" → lowest car price
+        // $max: "$price" → highest car price
 
         const priceRange =
             priceAggregation.length > 0
