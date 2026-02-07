@@ -58,7 +58,8 @@ app.set("trust proxy", true);
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://autora-frontend.vercel.app"
+  "https://autora-frontend.vercel.app" ,
+  "http://localhost:3000"
 ];
 
 app.use((req, res, next) => {
