@@ -3,6 +3,7 @@ import Car from "../Models/carModel.js";
 import TestDriveBooking from "../Models/testDriveBookingModel.js";
 import User from "../Models/userModel.js";
 import { serializeCarData } from "./helper.js";
+import mongoose from "mongoose";
 
 export const bookTestDrive = expressAsyncHandler(async(req,res,next)=>{
     const {carId , bookingDate , startTime , endTime , notes} = req.body;
@@ -48,7 +49,69 @@ export const bookTestDrive = expressAsyncHandler(async(req,res,next)=>{
         }
 
         const booking = await TestDriveBooking.create({
-            carId ,
+            carId : carId ,
+            userId : user._id ,
+            bookingDate : new Date(bookingDate) ,
+            startTime ,
+            endTime ,
+            notes : notes || null ,
+            status : "PENDING"
+        });
+
+        return res.send(booking);
+
+    }catch(err){
+        const error = new Error("Error booking test drive " + err.message);
+        next(error);
+    }
+});
+
+export const bookTestDriveForChatBot = expressAsyncHandler(async(req,res,next)=>{
+    const {carId , bookingDate , startTime , endTime , notes} = req.body;
+    const clerkId = req?.auth?.userId;
+
+    try{
+        // console.log("test drive " ,carId)
+        const car = await Car.findOne({
+            _id : new mongoose.Types.ObjectId(carId) ,
+            status : "AVAILABLE"
+        });
+
+        const user = await User.findOne({
+            clerkUserId : clerkId
+        })
+
+        if(!user){
+            throw new Error("User not found");
+        }
+
+        if(!car){
+            throw new Error("Car not available for test drive");
+        }
+
+        // MongoDB me Date exact timestamp se match hoti hai.
+        // Agar DB me date stored hai: 2025-01-02T00:00:00.000Z and Aur frontend se aayi: 2025-01-02T05:30:00.000Z
+        // Match fail ho jayega, even though same calendar date hai.
+
+        const date = new Date(bookingDate);
+        const startOfDay = new Date(date.setHours(0,0,0,0));
+        const endOfDay = new Date(date.setHours(23,59,59,999));
+
+        const existingBooking = await TestDriveBooking.findOne({
+            carId : carId ,
+            bookingDate : {$gte : startOfDay , $lte : endOfDay},
+            // req.body me date hamesha string hi aati hai
+            // (JSON parser date ko Date object me convert nahi karta)
+            startTime ,
+            status : {$in : ["PENDING" , "CONFIRMED"]}
+        });
+
+        if(existingBooking){
+            throw new Error("This time slot is already booked. Please select another time.");
+        }
+
+        const booking = await TestDriveBooking.create({
+            carId : new mongoose.Types.ObjectId(carId) ,
             userId : user._id ,
             bookingDate : new Date(bookingDate) ,
             startTime ,

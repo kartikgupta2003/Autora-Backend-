@@ -23,6 +23,8 @@ import carRoutes from "./Routes/carRoutes.js";
 import settingRoutes from "./Routes/settingRoutes.js";
 // const userRoutes = require("./Routes/userRoutes");
 import userRoutes from "./Routes/userRoutes.js" ;
+import chatRoutes from "./Routes/chatRoutes.js";
+import chatBotRoutes from "./Routes/chatBotRoutes.js";
 
 import showCarRoutes from "./Routes/showCarRoutes.js";
 import testDriveRoutes from "./Routes/testDriveRoutes.js";
@@ -59,7 +61,8 @@ app.set("trust proxy", true);
 const allowedOrigins = [
   "http://localhost:5173",
   "https://autora-frontend.vercel.app" ,
-  "http://localhost:3000"
+  "http://localhost:3000" ,
+  "http://localhost:8000"
 ];
 
 app.use((req, res, next) => {
@@ -88,6 +91,8 @@ app.use("/api/processImage" , imageProcessRoutes);
 app.use("/api/car", carRoutes);
 app.use("/api/settings" , settingRoutes);
 app.use("/api/user" , userRoutes);
+app.use("/api/chats" , chatRoutes);
+app.use("/api/chatbot" , chatBotRoutes);
 app.use("/api/showCars" , showCarRoutes);
 app.use("/api/test-drive" , testDriveRoutes);
 app.use("/api/adminDrive", adminTestDriveRoutes);
@@ -101,7 +106,7 @@ app.use(errorHandler);
 // const port = process.env.PORT ;
 // app.listen(port , ()=> console.log(`Server started at port ${port}`));
 
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 8080;
 
 if (process.env.NODE_ENV !== "production") {
   app.listen(port, () => console.log(`Server started at port ${port}`));
