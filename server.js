@@ -61,8 +61,7 @@ app.set("trust proxy", true);
 const allowedOrigins = [
   "http://localhost:5173",
   "https://autora-frontend.vercel.app" ,
-  "http://localhost:3000" ,
-  "http://localhost:8000"
+  "https://autora-chatbot-backend.vercel.app/"
 ];
 
 app.use((req, res, next) => {
