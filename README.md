@@ -34,6 +34,19 @@ Backend API: https://autora-backend.vercel.app
 
 ---
 
+## AI Chatbot
+
+Built as a separate FastAPI microservice integrated with the main Node.js backend
+Uses LangChain for LLM orchestration and tool integration
+Uses LangGraph to manage conversational workflows, state, and multi-step reasoning
+Supports Human-in-the-Loop (HITL) confirmation for critical actions like booking test drives
+Dynamically calls backend APIs (e.g., availability check, booking endpoints) via tool execution
+Maintains conversational state using thread-based context handling
+Prevents hallucinations by enforcing structured tool usage and validated inputs
+Designed to handle both informational queries and action-based workflows
+
+---
+
 ## Platform & Security Features
 
 - Secure backend APIs with authentication middleware  
@@ -49,31 +62,22 @@ Backend API: https://autora-backend.vercel.app
 
 ## Tech Stack
 
-### Backend
+# Backend
+- Node.js
+- Express.js
+- MongoDB + Mongoose
+- FastAPI (Chatbot Service)
+- Python
+- LangChain
+- LangGraph
+- Clerk Server SDK
+- Arcjet (Rate Limiting & Security)
+- AI APIs
 
-- Node.js  
-- Express.js  
-- MongoDB + Mongoose  
-- Clerk Server SDK  
-- Arcjet (Rate Limiting & Security)  
-- AI Image Processing APIs  
-
-### Frontend
-
-- React (Vite)  
-- Tailwind CSS  
-- Shadcn UI  
-- React Router  
-- Axios  
-- Clerk Authentication  
-
----
-
-
-## Docker Setup
-
-This project is fully containerized using Docker and Docker Compose.
-
-For the complete Docker configuration and setup instructions, refer to:
-
-https://github.com/kartikgupta2003/Autora---Ai-Car-MarketPlace
+# Frontend
+- React (Vite)
+- Tailwind CSS
+- Shadcn UI
+- React Router
+- Axios
+- Clerk Authentication
