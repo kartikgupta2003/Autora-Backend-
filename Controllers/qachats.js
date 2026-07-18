@@ -32,7 +32,7 @@ export const fetchAllChats = async(req,res,next)=>{
 
 export const updateActiveDoc = async(req,res,next)=>{
     try{
-        console.log("update hone aya ");
+        // console.log("update hone aya ");
         const clerkId = req?.auth?.userId;
         const user = await User.findOne({clerkUserId : clerkId});
         if(!user){
@@ -40,7 +40,7 @@ export const updateActiveDoc = async(req,res,next)=>{
             throw error ;
         }
         const {active_doc_hash , active_doc_name , thread_id} = req.body ;
-        console.log("update hone aya " , active_doc_hash , active_doc_name);
+        // console.log("update hone aya " , active_doc_hash , active_doc_name);
         const updatedDoc = await QAChat.findOneAndUpdate({userId : user._id , thread_id : thread_id} , {$set : {active_doc_hash : active_doc_hash , active_doc_name : active_doc_name}} , {new : true});
         if(!updatedDoc){
             const error = new Error("Thread not found");
@@ -57,7 +57,7 @@ export const addNewChat = async(req,res,next)=>{
     const clerkId = req?.auth?.userId;
     const {thread_id, thread_name} = req.body ;
     try{
-        console.log("thread " , thread_id , thread_name);
+        // console.log("thread " , thread_id , thread_name);
         if(!thread_id || !thread_name){
             const error = new Error("Invalid thread id or name !");
             throw error ;
@@ -69,7 +69,7 @@ export const addNewChat = async(req,res,next)=>{
         }
         
         const existingThread =await  QAChat.findOne({userId : user._id , thread_id : thread_id}) ;
-        console.log("existing thread " , existingThread);
+        // console.log("existing thread " , existingThread);
         if(existingThread){
             const error = new Error("Chat with this thread_id already exists");
             throw error ;
@@ -80,10 +80,10 @@ export const addNewChat = async(req,res,next)=>{
             thread_id : thread_id ,
             thread_name : thread_name 
         });
-        console.log("new thread " , new_chat);
+        // console.log("new thread " , new_chat);
         return res.status(201).send(new_chat);
     }catch(err){
-        console.log(err);
+        // console.log(err);
         next(err);
     }
 }

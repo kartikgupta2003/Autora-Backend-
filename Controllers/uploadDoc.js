@@ -2,10 +2,10 @@ import User from "../Models/userModel.js";
 export const uploadDoc = async(req,res,next)=>{
     const clerkId = req?.auth?.userId;
     const {doc_hash , doc_name , doc_size} = req.body ;
-    console.log("doc " , req.body);
+    // console.log("doc " , req.body);
     try{
         const user = await User.findOne({clerkUserId : clerkId}) ;
-        console.log("doc " , req.body);
+        // console.log("doc " , req.body);
         if(!user){
             const err = new Error("User not found");
             throw err;

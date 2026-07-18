@@ -5,13 +5,7 @@ import { ClerkExpressRequireAuth  , ClerkExpressWithAuth} from "@clerk/clerk-sdk
 import {fetchAllChats , updateActiveDoc , addNewChat} from "../Controllers/qachats.js";
 
 router.get("/fecthChats" , ClerkExpressRequireAuth() , fetchAllChats);
-router.patch("/updateDoc" , (req,res,next)=>{
-    console.log("aya aya aya")
-    next()
-} , ClerkExpressRequireAuth() , (req,res,next)=>{
-    console.log("aya aya aya")
-    next()
-} ,updateActiveDoc);
+router.patch("/updateDoc" , ClerkExpressRequireAuth() , updateActiveDoc);
 router.post("/addChat" , ClerkExpressRequireAuth() , addNewChat);
 
 export default router ;
