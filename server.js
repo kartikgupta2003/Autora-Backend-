@@ -30,6 +30,9 @@ import showCarRoutes from "./Routes/showCarRoutes.js";
 import testDriveRoutes from "./Routes/testDriveRoutes.js";
 import adminTestDriveRoutes from "./Routes/adminTesDriveRoutes.js";
 
+import qaChatRoutes from "./Routes/qaChatRoutes.js";
+import uploadRoutes from "./Routes/uploadDocRoutes.js";
+
 // const { ClerkExpressWithAuth } = require("@clerk/clerk-sdk-node");
 import { ClerkExpressWithAuth } from "@clerk/clerk-sdk-node" ;
 // console.log("CLERK_SECRET_KEY exists:", !!process.env.CLERK_SECRET_KEY);
@@ -62,7 +65,8 @@ const allowedOrigins = [
   "http://localhost:5173",
   "https://autora-frontend.vercel.app" ,
   "https://autora-chatbot-backend.vercel.app",
-  "https://autora-chatbot-backend-production.up.railway.app/"
+  "https://autora-chatbot-backend-production.up.railway.app/",
+  "http://localhost:8000"
 ];
 
 app.use((req, res, next) => {
@@ -70,7 +74,7 @@ app.use((req, res, next) => {
   if (allowedOrigins.includes(origin)) {
     res.header("Access-Control-Allow-Origin", origin);
   }
-  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  res.header("Access-Control-Allow-Methods", "GET,POST,PATCH,PUT,DELETE,OPTIONS");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.header("Access-Control-Allow-Credentials", "true");
 
@@ -96,6 +100,8 @@ app.use("/api/chatbot" , chatBotRoutes);
 app.use("/api/showCars" , showCarRoutes);
 app.use("/api/test-drive" , testDriveRoutes);
 app.use("/api/adminDrive", adminTestDriveRoutes);
+app.use("/api/qachats" , qaChatRoutes);
+app.use("/api/docs" , uploadRoutes);
 // these 3 are going to be protected routes 
 // app.use("/api/admin");
 // app.use("/api/saved-cars");

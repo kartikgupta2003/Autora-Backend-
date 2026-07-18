@@ -33,6 +33,22 @@ const userSchema = new mongoose.Schema({
             type : mongoose.Schema.Types.ObjectId ,
             ref : "TestDriveBooking"
         }
+    ] ,
+    uploaded_docs : [
+        {
+            doc_name : {
+                type : String ,
+                required : true 
+            } ,
+            doc_hash : {
+                type : String ,
+                required : true ,
+                // unique : true 
+            } ,
+            doc_size : {
+                type : Number 
+            } 
+        }
     ]
 
 } , {timestamps : true});
