@@ -25,7 +25,6 @@ export const uploadDoc = async(req,res,next)=>{
         if(existingDoc){
             return res.json({"already_uploaded" : true});
         }
-
         const doc = {
             "doc_name" : doc_name ,
             "doc_hash" : doc_hash ,
